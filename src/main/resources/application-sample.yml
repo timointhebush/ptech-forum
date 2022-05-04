@@ -1,1 +1,17 @@
 
+spring:
+  application:
+    name: ptech-forum
+  profiles:
+    group:
+      dev: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: [url]
+    username: [username]
+    password: [password]

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<body lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/app" layout:decorate="~{layouts/app}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div layout:fragment="content" class="main-content">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col">
+                <h2>자유 게시판</h2>
+            </div>
+        </div>
+        <div class="table-responsive-md">
+            <table class="table table-bordered">
+<!--                <caption></caption>-->
+<!--                <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>-->
+                <tbody>
+                <tr>
+                    <th class="align-middle text-center grey-bg text-white">제목</th>
+                    <th th:text="${post.getTitle()}"></th>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center grey-bg text-white">작성자</th>
+                    <th th:text="${post.getUser().getUsername()}"></th>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center grey-bg text-white">등록일자</th>
+                    <th th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></th>
+                    <th class="align-middle text-center grey-bg text-white">수정일자</th>
+                    <th th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></th>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center grey-bg text-white">내용</th>
+                    <td colspan="5" th:utext="${post.getContent()}"></td>
+                </tr>
+                <tr>
+                    <th class="align-middle text-center grey-bg text-white">첨부파일</th>
+<!--                    <td colspan="5" th:if="${attachments != null}">-->
+<!--                        <div class="row" th:each="attachment : ${attachments}">-->
+<!--                            <div class="col">-->
+<!--                                <a th:text="${attachment.getOriginFilename()}"-->
+<!--                                   th:href="@{/files/attachments/{id}(id = ${attachment.getId()})}"></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a href="#" class="btn btn-primary" th:href="${post.nttTy.name().toLowerCase() +'s'}">목록</a>
+                </div>
+                <div>
+<!--                    <button class="btn btn-danger" th:if="${post.getAccount().getId() == currentUser.getId()}" data-bs-toggle="modal" th:data-bs-target="'#deletepostModal-'+${post.id}">삭제</button>-->
+<!--                    <a href="#" class="btn btn-primary" th:if="${post.getAccount().getId() == currentUser.getId()}" th:href="@{'/commons/new/' + ${post.getId()}}">수정</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

@@ -5,12 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" type="text/css" href="#" th:href="@{/css/app.css}" />
 </head>
 
-<div th:fragment="top-bar" class="top-bar" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="nav" class="p-3 bg-dark text-white" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img class="bi me-2" height="32" th:src="@{/imgs/ptech.png}">
+                </a>
 
-</div>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">자유 게시판</a></li>
+                </ul>
 
-<div th:fragment="nav" class="main-nav">
+                <div class="text-end">
+                    <th:block sec:authorize="isAuthenticated()" th:with="currentUser=${#authentication.getPrincipal().getUser()}">
+                        <span class="text-white" th:text="${currentUser.username}"></span>
+                    </th:block>
+                    <div class="m-1">
+                        MAIN-HOME
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <span th:inline="text">CURRENT USER: [[${#httpServletRequest.remoteUser}]] - ROLE_ADMIN!</span>
+                        </div>
 
+                        <div sec:authorize="hasRole('ROLE_USER')">
+                            <span th:inline="text">CURRENT USER: [[${#httpServletRequest.remoteUser}]] - ROLE_USER!</span>
+                        </div>
+
+                        <div sec:authorize="isAnonymous()">
+                            <span th:inline="text">CURRENT USER: Annonymous</span>
+                        </div>
+                    </div>
+                </div>
+                    <button sec:authorize="isAnonymous()" type="button" class="btn btn-outline-light me-2">Login</button>
+                    <button sec:authorize="isAuthenticated()" type="button" class="btn btn-outline-warning me-2">Logout</button>
+                    <button sec:authorize="isAnonymous()" type="button" class="btn btn-warning">Sign-up</button>
+                </div>
+            </div>
+        </div>
 </div>

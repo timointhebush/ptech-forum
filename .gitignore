@@ -38,3 +38,6 @@ out/
 
 application.yml
 upload/
+src/main/resources/static/css/app.css
+src/main/resources/static/css/app.css.map
+.sass-cache

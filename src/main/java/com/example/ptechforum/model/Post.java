@@ -1,6 +1,8 @@
 package com.example.ptechforum.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,7 @@ import java.time.Instant;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -28,4 +31,11 @@ public class Post {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @Builder
+    public Post(String title, String content, Member member) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+    }
 }

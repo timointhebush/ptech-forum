@@ -7,6 +7,7 @@ import com.example.ptechforum.model.enums.Author;
 import com.example.ptechforum.repository.RoleRepository;
 import com.example.ptechforum.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,5 +62,10 @@ public class MemberService implements UserDetailsService {
             throw new UsernameNotFoundException("Member not found");
         }
         return new MemberAdapter(member);
+    }
+
+    public Member getLoggedInMember() {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return memberRepository.findByEmail(user.getUsername());
     }
 }

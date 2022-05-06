@@ -27,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf()
                 .and()
                     .authorizeRequests()
+                    .antMatchers("/posts/new/**").authenticated()
                     .anyRequest()
                     .permitAll()
                 .and()

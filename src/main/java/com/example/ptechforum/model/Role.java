@@ -22,8 +22,8 @@ public class Role {
     private Author author;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @CreationTimestamp
     private Instant createdAt;

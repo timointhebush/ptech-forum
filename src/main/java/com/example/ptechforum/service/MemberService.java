@@ -1,11 +1,13 @@
 package com.example.ptechforum.service;
 
 import com.example.ptechforum.model.Role;
-import com.example.ptechforum.model.User;
+import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.enums.Author;
 import com.example.ptechforum.repository.RoleRepository;
-import com.example.ptechforum.repository.UserRepository;
+import com.example.ptechforum.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,36 +16,36 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
-    private final UserRepository userRepository;
+public class MemberService {
+    private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostConstruct
     public void initialize() {
-        User admin = userRepository.findByEmail("admin@admin.com");
+        Member admin = memberRepository.findByEmail("admin@admin.com");
         if (Objects.isNull(admin)) {
-            admin = User.builder()
+            admin = Member.builder()
                     .email("admin@admin.com")
                     .encryptedPassword(bCryptPasswordEncoder.encode("admin"))
                     .username("admin").build();
-            userRepository.save(admin);
+            memberRepository.save(admin);
             Role adminRole = Role.builder()
                     .author(Author.ADMIN)
-                    .user(admin).build();
+                    .member(admin).build();
             roleRepository.save(adminRole);
         }
 
-        User testUser = userRepository.findByEmail("test@test.com");
-        if (Objects.isNull(testUser)) {
-            testUser = User.builder()
+        Member testMember = memberRepository.findByEmail("test@test.com");
+        if (Objects.isNull(testMember)) {
+            testMember = Member.builder()
                     .email("test@test.com")
                     .encryptedPassword(bCryptPasswordEncoder.encode("test"))
                     .username("test").build();
-            userRepository.save(testUser);
+            memberRepository.save(testMember);
             Role testUserRole = Role.builder()
                     .author(Author.MEMBER)
-                    .user(testUser).build();
+                    .member(testMember).build();
             roleRepository.save(testUserRole);
         }
     }

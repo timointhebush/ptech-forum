@@ -35,8 +35,8 @@ public class Post {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
-    private List<File> files = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "post")
+    private File file;
 
     @Builder
     public Post(String title, String content, Member member) {

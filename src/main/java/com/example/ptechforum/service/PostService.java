@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,8 +51,8 @@ public class PostService {
     @Transactional
     public void deleteById(Long id) {
         Post post = this.findById(id);
-        if (!Objects.isNull(post.getFiles())) {
-            fileService.deleteAllFile(post.getFiles());
+        if (!Objects.isNull(post.getFile())) {
+            fileService.deleteFileById(post.getFile().getId());
         }
         postRepository.delete(post);
     }

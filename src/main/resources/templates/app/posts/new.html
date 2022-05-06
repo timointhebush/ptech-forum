@@ -19,11 +19,11 @@
                     <input type="file" class="form-control" id="file-input" name="file">
                 </div>
                 <hr/>
-                <div class="col-12" th:if="${post.getFiles() != null}" th:each="file: ${post.getFiles()}">
-                    <div class="file-item" th:attrappend="data-id=${file.getId()}">
-                        <a class="primary-text" th:href="@{/files/{id}(id = ${file.getId()})}"
-                           th:text="${file.getOriginalName()}"></a>
-                        <span class="file-delete-btn text-danger fw-bold" th:attrappend="data-id=${file.getId()}">
+                <div class="col-12" th:if="${post.getFile() != null}">
+                    <div class="file-item" th:attrappend="data-id=${post.getFile().getId()}">
+                        <a class="primary-text" th:href="@{/files/{id}(id = ${post.getFile().getId()})}"
+                           th:text="${post.getFile().getOriginalName()}"></a>
+                        <span class="file-delete-btn text-danger fw-bold" th:attrappend="data-id=${post.getFile().getId()}">
                             X
                         </span>
                     </div>

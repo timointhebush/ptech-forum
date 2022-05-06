@@ -34,11 +34,11 @@
                 </tr>
                 <tr>
                     <th class="align-middle text-center grey-bg">첨부파일</th>
-                    <td colspan="5" th:if="${post.getFiles() != null}">
-                        <div class="row" th:each="file : ${post.getFiles()}">
+                    <td colspan="5" th:if="${post.getFile() != null}">
+                        <div class="row">
                             <div class="col">
-                                <a th:text="${file.getOriginalName()}"
-                                   th:href="@{/files/{id}(id = ${file.getId()})}"></a>
+                                <a th:text="${post.getFile().getOriginalName()}"
+                                   th:href="@{/files/{id}(id = ${post.getFile().getId()})}"></a>
                             </div>
                         </div>
                     </td>

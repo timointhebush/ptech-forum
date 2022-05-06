@@ -135,4 +135,11 @@ public class FileService {
             this.deleteFileById(id);
         }
     }
+
+    @Transactional
+    public void deleteAllFile(List<File> files) {
+        for (File file : files) {
+            this.deleteFileById(file.getId());
+        }
+    }
 }

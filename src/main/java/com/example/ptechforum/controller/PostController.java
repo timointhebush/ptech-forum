@@ -49,4 +49,10 @@ public class PostController {
         Post updatedPost = postService.update(vo);
         return "redirect:/posts/" + updatedPost.getId();
     }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        postService.deleteById(id);
+        return "redirect:/posts";
+    }
 }

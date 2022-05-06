@@ -50,9 +50,12 @@
 <!--                    <a href="#" class="btn btn-primary" th:href="${post.nttTy.name().toLowerCase() +'s'}">목록</a>-->
                 </div>
                 <div>
-<!--                    <button class="btn btn-danger" th:if="${post.getAccount().getId() == currentUser.getId()}" data-bs-toggle="modal" th:data-bs-target="'#deletepostModal-'+${post.id}">삭제</button>-->
+                    <button form="post-delete-form" class="btn btn-danger">삭제</button>
 <!--                    <a href="#" class="btn btn-primary" th:if="${post.getAccount().getId() == currentUser.getId()}" th:href="@{'/commons/new/' + ${post.getId()}}">수정</a>-->
                 </div>
+                <form id="post-delete-form" th:action="@{${'/posts/' + post.getId() + '/delete'}}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete">
+                </form>
             </div>
         </div>
     </div>

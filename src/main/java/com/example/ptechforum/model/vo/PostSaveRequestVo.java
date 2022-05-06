@@ -5,14 +5,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class PostSaveRequestVo {
+    private Long id;
 
     private String title;
 
     private String content;
 
     private MultipartFile file;
+
+    private Long[] deleteFileIds;
+
+    public List<Long> getDeleteFileIds() {
+        return Arrays.asList(this.deleteFileIds);
+    }
+
 }

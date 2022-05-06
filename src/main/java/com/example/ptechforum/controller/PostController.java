@@ -36,4 +36,17 @@ public class PostController {
         model.addAttribute("post", post);
         return "app/posts/show";
     }
+
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable("id") Long id, Model model) {
+        Post post = postService.findById(id);
+        model.addAttribute("post", post);
+        return "app/posts/new";
+    }
+
+    @PostMapping("/{id}")
+    public String update(@PathVariable("id") Long id, @ModelAttribute PostSaveRequestVo vo) throws IOException {
+        Post updatedPost = postService.update(vo);
+        return "redirect:/posts/" + updatedPost.getId();
+    }
 }

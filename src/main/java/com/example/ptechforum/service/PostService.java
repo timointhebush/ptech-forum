@@ -1,6 +1,5 @@
 package com.example.ptechforum.service;
 
-import com.example.ptechforum.model.File;
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
 import com.example.ptechforum.model.vo.PostSaveRequestVo;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -38,5 +36,13 @@ public class PostService {
     public Post findById(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
         return postOptional.orElse(null);
+    }
+
+    @Transactional
+    public Post update(PostSaveRequestVo vo) throws IOException {
+        Post post = this.findById(vo.getId());
+        post.update(vo);
+        fileService.updateAttachment(vo.getDeleteFileIds(), vo.getFile(), post);
+        return post;
     }
 }

@@ -4,6 +4,7 @@ import com.example.ptechforum.model.File;
 import com.example.ptechforum.model.Post;
 import com.example.ptechforum.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -24,10 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -111,5 +109,30 @@ public class FileService {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + encodedOriginalFileName + "\"")
                 .body(resource);
+    }
+
+    @Transactional
+    public void updateAttachment(List<Long> deleteFileIds, MultipartFile multipartFile, Post post) throws IOException {
+        if (!deleteFileIds.isEmpty()) {
+            this.deleteAllFileById(deleteFileIds);
+        }
+        if (!multipartFile.isEmpty()) {
+            this.saveAttachment(multipartFile, post);
+        }
+    }
+
+    @Transactional
+    public void deleteFileById(Long id) {
+        File fileToDelete = this.findById(id);
+        fileRepository.delete(fileToDelete);
+        String path = this.uploadPath + fileToDelete.getRelativePath();
+        FileUtils.deleteQuietly(FileUtils.getFile(path));
+    }
+
+    @Transactional
+    public void deleteAllFileById(List<Long> deleteFileIds) {
+        for (Long id: deleteFileIds) {
+            this.deleteFileById(id);
+        }
     }
 }

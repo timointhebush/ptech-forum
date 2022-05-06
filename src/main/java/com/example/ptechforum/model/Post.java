@@ -8,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +33,9 @@ public class Post {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private List<File> files = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, Member member) {

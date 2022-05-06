@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,10 @@ public class PostService {
             fileService.saveAttachment(vo.getFile(), post);
         }
         return post;
+    }
+
+    public Post findById(Long id) {
+        Optional<Post> postOptional = postRepository.findById(id);
+        return postOptional.orElse(null);
     }
 }

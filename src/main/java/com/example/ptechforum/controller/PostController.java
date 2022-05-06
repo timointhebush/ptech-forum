@@ -29,4 +29,11 @@ public class PostController {
         Post savedPost = postService.save(vo);
         return "redirect:/posts/" + savedPost.getId();
     }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") Long id, Model model) {
+        Post post = postService.findById(id);
+        model.addAttribute("post", post);
+        return "app/posts/show";
+    }
 }

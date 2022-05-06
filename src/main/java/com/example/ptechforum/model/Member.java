@@ -1,22 +1,16 @@
 package com.example.ptechforum.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Member {
 
@@ -30,9 +24,19 @@ public class Member {
 
     private String username;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
+    private Set<Role> roles = new HashSet<>();
+
     @CreationTimestamp
     private Instant createdAt;
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @Builder
+    public Member(String email, String encryptedPassword, String username) {
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.username = username;
+    }
 }

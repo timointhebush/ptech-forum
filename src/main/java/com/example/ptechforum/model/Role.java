@@ -10,8 +10,7 @@ import java.time.Instant;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -30,4 +29,10 @@ public class Role {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    @Builder
+    public Role(Author author, Member member) {
+        this.author = author;
+        this.member = member;
+    }
 }

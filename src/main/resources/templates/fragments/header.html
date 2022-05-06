@@ -21,17 +21,16 @@
                 </ul>
 
                 <div class="text-end">
-                    <th:block sec:authorize="isAuthenticated()" th:with="currentUser=${#authentication.getPrincipal().getUser()}">
-                        <span class="text-white" th:text="${currentUser.username}"></span>
-                    </th:block>
+<!--                    <th:block sec:authorize="isAuthenticated()" th:with="currentUser=${#authentication.getPrincipal().getUser()}">-->
+<!--                        <span class="text-white" th:text="${currentUser.username}"></span>-->
+<!--                    </th:block>-->
                     <div class="m-1">
-                        MAIN-HOME
                         <div sec:authorize="hasRole('ROLE_ADMIN')">
                             <span th:inline="text">CURRENT USER: [[${#httpServletRequest.remoteUser}]] - ROLE_ADMIN!</span>
                         </div>
 
-                        <div sec:authorize="hasRole('ROLE_USER')">
-                            <span th:inline="text">CURRENT USER: [[${#httpServletRequest.remoteUser}]] - ROLE_USER!</span>
+                        <div sec:authorize="hasRole('ROLE_MEMBER')">
+                            <span th:inline="text">CURRENT USER: [[${#httpServletRequest.remoteUser}]] - ROLE_MEMBER!</span>
                         </div>
 
                         <div sec:authorize="isAnonymous()">

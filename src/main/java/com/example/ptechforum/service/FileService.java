@@ -6,6 +6,11 @@ import com.example.ptechforum.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -85,5 +92,24 @@ public class FileService {
         }
         this.sequence = 0;
         return files;
+    }
+
+    public File findById(Long id) {
+        Optional<File> optionalFile = fileRepository.findById(id);
+        return optionalFile.orElse(null);
+    }
+
+    public ResponseEntity<?> downloadFileById(Long id) throws IOException {
+        File file = this.findById(id);
+        String encodedOriginalFileName = URLEncoder
+                .encode(file.getOriginalName(), "UTF-8")
+                .replaceAll("\\+", "%20");
+        Path downloadPath = Paths.get(uploadPath + file.getRelativePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(downloadPath));
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(file.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + encodedOriginalFileName + "\"")
+                .body(resource);
     }
 }

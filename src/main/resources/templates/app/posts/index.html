@@ -13,7 +13,7 @@
         <div class="table-responsive">
             <table class="table table-bordered">
                 <caption></caption>
-                <thead class="align-middle text-center grey-bg text-white">
+                <thead class="align-middle text-center grey-bg">
                 <tr>
 <!--                    <th>번호</th>-->
                     <th class="min-with-300">제목</th>
@@ -22,11 +22,11 @@
                 </tr>
                 </thead>
                 <tbody class="align-middle text-center">
-                <tr class="clickable-row" th:each="post, iter: ${posts}" role="button" th:onclick="'location.href=\''+ @{'/commons/'+ ${post.id}} + '\''">
+                <tr class="clickable-row" th:each="post, iter: ${posts}" role="button" th:onclick="'location.href=\''+ @{'/posts/'+ ${post.id}} + '\''">
 <!--                    <td th:text="${pagination.getPage().getTotalElements() - -->
 <!--                        ((pagination.getCurrent() - 1) * pagination.getPerPage() + iter.index)}"></td>-->
-                    <td class="text-start" th:text="${post.title}"></td>
-                    <td th:text="${qna.getUser().getUsername()}"></td>
+                    <td class="text-start" th:text="${post.getTitle()}"></td>
+                    <td th:text="${post.getMember().getUsername()}"></td>
                     <td th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 </tr>
 <!--                <tr th:if="${#lists.size(posts.getContent()) < 1}">-->

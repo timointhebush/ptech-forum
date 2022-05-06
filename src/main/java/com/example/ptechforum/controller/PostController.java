@@ -9,13 +9,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
-
     private final PostService postService;
+
+    @GetMapping("")
+    public String index(Model model) {
+        List<Post> posts = postService.findAll();
+        model.addAttribute("posts", posts);
+        return "app/posts/index";
+    }
 
     @GetMapping("/new")
     public String newPost(Model model) {

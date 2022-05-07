@@ -1,6 +1,8 @@
 package com.example.ptechforum.model;
 
+import com.example.ptechforum.model.vo.CommentSaveRequestVo;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +11,7 @@ import java.time.Instant;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Comment {
 
     @Id
@@ -30,4 +33,16 @@ public class Comment {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    public Comment(CommentSaveRequestVo vo) {
+        this.content = vo.getContent();
+    }
+
+    public void assignMember(Member member) {
+        this.member = member;
+    }
+
+    public void assignPost(Post post) {
+        this.post = post;
+    }
 }

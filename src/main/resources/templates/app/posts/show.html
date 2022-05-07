@@ -83,14 +83,15 @@
                 </div>
             </div>
         </div>
-        <form class="form-block">
+        <form class="form-block" th:action="@{/comments}" th:method="post">
+            <input type="hidden" name="postId" th:value="${post.getId()}">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                        <textarea class="form-input" required="" placeholder="Your Comment"></textarea>
+                        <textarea name="content" class="form-input" required="" placeholder="Your Comment"></textarea>
                     </div>
                 </div>
-                <a class="btn btn-primary pull-right">submit</a>
+                <button type="submit" class="btn btn-primary pull-right">submit</button>
             </div>
         </form>
     </div>

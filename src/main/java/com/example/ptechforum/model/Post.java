@@ -38,6 +38,9 @@ public class Post {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "post")
     private File file;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Post(String title, String content, Member member) {
         this.title = title;

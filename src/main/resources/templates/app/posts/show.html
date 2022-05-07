@@ -59,5 +59,41 @@
             </div>
         </div>
     </div>
+    <div class="container py-4">
+    <div class="be-comment-block">
+        <div class="be-comment">
+            <div th:if="${#lists.size(post.getComments()) > 0}" th:each="comment: ${post.getComments()}">
+                <div class="be-comment-content">
+				<span class="be-comment-name">
+					<a href="#" th:text="${post.getMember().getUsername()}"></a>
+                </span>
+                <span class="be-comment-time" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}">
+				</span>
+                    <p class="be-comment-text" th:text="${comment.getContent()}">
+                    </p>
+                </div>
+                <button class="btn-danger comment-delete-btn">삭제</button>
+                <button class="btn-secondary comment-edit-btn">수정</button>
+            </div>
+            <div th:unless="${#lists.size(post.getComments()) > 0}">
+                <div class="be-comment-content">
+                    <p class="be-comment-text">
+                        아직 댓글이 없습니다!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <form class="form-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <textarea class="form-input" required="" placeholder="Your Comment"></textarea>
+                    </div>
+                </div>
+                <a class="btn btn-primary pull-right">submit</a>
+            </div>
+        </form>
+    </div>
+    </div>
 </div>
 </body>

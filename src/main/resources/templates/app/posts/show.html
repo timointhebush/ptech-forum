@@ -72,7 +72,9 @@
                     <p class="be-comment-text" th:text="${comment.getContent()}">
                     </p>
                 </div>
-                <button class="btn-danger comment-delete-btn">삭제</button>
+                <form id="comment-delete-form" th:action="@{${'/comments/' + comment.getId() + '/delete'}}" th:method="post">
+                </form>
+                <button form="comment-delete-form" th:attrappend="data-id=${comment.getId()}" class="btn-danger comment-delete-btn">삭제</button>
                 <button class="btn-secondary comment-edit-btn">수정</button>
             </div>
             <div th:unless="${#lists.size(post.getComments()) > 0}">
@@ -98,3 +100,8 @@
     </div>
 </div>
 </body>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        // let comment = new CommentManager();
+    </script>
+</th:block>

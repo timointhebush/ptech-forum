@@ -142,4 +142,16 @@ public class FileService {
             this.deleteFileById(file.getId());
         }
     }
+
+    @Transactional
+    public List<File> saveImages(MultipartFile[] multipartFiles) throws IOException {
+        List<File> files = new ArrayList<>();
+        for (MultipartFile multipartFile: multipartFiles) {
+            File file = createFile(multipartFile);
+            file = fileRepository.save(file);
+            uploadFile(multipartFile, file);
+            files.add(file);
+        }
+        return files;
+    }
 }

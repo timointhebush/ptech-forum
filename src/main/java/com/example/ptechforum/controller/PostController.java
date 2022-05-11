@@ -4,6 +4,11 @@ import com.example.ptechforum.model.Post;
 import com.example.ptechforum.model.vo.PostSaveRequestVo;
 import com.example.ptechforum.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +23,10 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("")
-    public String index(Model model) {
-        List<Post> posts = postService.findAll();
-        model.addAttribute("posts", posts);
+    public String index(Model model, @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Post> postPage = postService.findAll(pageable);
+        model.addAttribute("page", postPage);
+        this.activateNav(model);
         return "app/posts/index";
     }
 
@@ -28,6 +34,7 @@ public class PostController {
     public String newPost(Model model) {
         PostSaveRequestVo post = new PostSaveRequestVo();
         model.addAttribute("post", post);
+        this.activateNav(model);
         return "app/posts/new";
     }
 
@@ -41,6 +48,7 @@ public class PostController {
     public String show(@PathVariable("id") Long id, Model model) {
         Post post = postService.findById(id);
         model.addAttribute("post", post);
+        this.activateNav(model);
         return "app/posts/show";
     }
 
@@ -48,6 +56,7 @@ public class PostController {
     public String edit(@PathVariable("id") Long id, Model model) {
         Post post = postService.findById(id);
         model.addAttribute("post", post);
+        this.activateNav(model);
         return "app/posts/new";
     }
 
@@ -61,5 +70,9 @@ public class PostController {
     public String delete(@PathVariable("id") Long id) {
         postService.deleteById(id);
         return "redirect:/posts";
+    }
+
+    public void activateNav(Model model) {
+        model.addAttribute("navActive", "posts");
     }
 }

@@ -44,6 +44,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let post = new Post();
-        new SummernoteManager();
+        let content = '[[${post.getContent()}]]'.replaceAll("\"", "");
+        new SummernoteManager(content);
     </script>
 </th:block>

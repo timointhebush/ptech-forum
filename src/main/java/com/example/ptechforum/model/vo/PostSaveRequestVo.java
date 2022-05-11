@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class PostSaveRequestVo {
     private Long[] deleteFileIds;
 
     public List<Long> getDeleteFileIds() {
+        if (Objects.isNull(this.deleteFileIds)) {
+            return new ArrayList<>();
+        }
         return Arrays.asList(this.deleteFileIds);
     }
 

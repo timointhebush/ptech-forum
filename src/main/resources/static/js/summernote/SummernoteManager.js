@@ -1,5 +1,5 @@
 class SummernoteManager {
-    constructor(options, content) {
+    constructor(content) {
         var self = this;
         this.options = {
             lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
@@ -26,7 +26,7 @@ class SummernoteManager {
         };
         this.summernote = $('#summernote').summernote(this.options);
         if (content != 'null') {
-            $('#summernote').summernote('code', this.htmlDecode(this.options.content));
+            $('#summernote').summernote('code', this.htmlDecode(content));
         }
         this.init();
     }

@@ -1,11 +1,12 @@
 package com.example.ptechforum.controller;
 
+import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
+import com.example.ptechforum.model.helper.CurrentUser;
 import com.example.ptechforum.model.vo.PostSaveRequestVo;
 import com.example.ptechforum.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -14,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,8 +39,8 @@ public class PostController {
     }
 
     @PostMapping("")
-    public String create(@ModelAttribute PostSaveRequestVo vo) throws IOException {
-        Post savedPost = postService.save(vo);
+    public String create(@ModelAttribute PostSaveRequestVo vo, @CurrentUser Member currentMember) throws IOException {
+        Post savedPost = postService.save(vo, currentMember);
         return "redirect:/posts/" + savedPost.getId();
     }
 

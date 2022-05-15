@@ -24,8 +24,7 @@ public class PostService {
     private final FileService fileService;
 
     @Transactional
-    public Post save(PostSaveRequestVo vo) throws IOException {
-        Member member = memberService.getLoggedInMember();
+    public Post save(PostSaveRequestVo vo, Member member) throws IOException {
         Post post = Post.builder()
                 .title(vo.getTitle())
                 .content(vo.getContent())

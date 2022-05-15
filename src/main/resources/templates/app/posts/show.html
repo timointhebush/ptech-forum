@@ -24,7 +24,7 @@
         <div class="d-flex justify-content-end">
             <a class="btn btn-secondary mx-1" th:href="@{'/posts'}">목록</a>
             <form th:action="@{'/posts/' + ${post.getId()} + '/delete'}" method="post">
-                <input type="submit" class="btn btn-danger mx-1" value="삭제">
+                <input type="submit" class="btn btn-danger mx-1 btn-delete" value="삭제">
             </form>
             <a class="btn btn-warning mx-1" th:href="@{'/posts/' + ${post.getId()} + '/edit'}">수정</a>
         </div>
@@ -38,7 +38,7 @@
                     <div th:text="${comment.getContent()}"></div>
                     <div class="d-flex">
                         <form th:action="@{'/comments/' + ${comment.getId()} + '/delete'}" method="post">
-                            <input type="submit" class="btn btn-danger btn-sm mx-1" value="삭제">
+                            <input type="submit" class="btn btn-danger btn-sm mx-1 btn-delete" value="삭제">
                         </form>
                         <a class="btn btn-warning btn-sm mx-1" th:href="@{'/comments/' + ${post.getId()} + '/edit'}">수정</a>
                     </div>

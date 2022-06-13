@@ -23,9 +23,10 @@
         <hr>
         <div class="d-flex justify-content-end">
             <a class="btn btn-secondary mx-1" th:href="@{'/posts'}">목록</a>
-            <form th:action="@{'/posts/' + ${post.getId()} + '/delete'}" method="post">
-                <input type="submit" class="btn btn-danger mx-1 btn-delete" value="삭제">
-            </form>
+<!--            <form id="post-delete-form" th:action="@{'/posts/' + ${post.getId()}}" method="POST">-->
+<!--                <input type="hidden" name="_method" value="DELETE">-->
+<!--            </form>-->
+            <button id="post-delete-btn" class="btn btn-danger mx-1 btn-delete">삭제</button>
             <a class="btn btn-warning mx-1" th:href="@{'/posts/' + ${post.getId()} + '/edit'}">수정</a>
         </div>
     </div>
@@ -72,6 +73,21 @@
 </body>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        // let comment = new CommentManager();
+        const postDeleteBtn = document.getElementById("post-delete-btn");
+        postDeleteBtn.addEventListener("click", async () => {
+            let postId = "[[${post.getId()}]]";
+            let csrfMetaTag = document.getElementsByName('_csrf')[0];
+            try {
+                const response = await fetch("/posts/" + postId, {
+                    method: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': csrfMetaTag.getAttribute("content")
+                    }
+                });
+                location.href = "/posts";
+            } catch(error) {
+                alert("게시글 삭제 중 오류가 발생했습니다.");
+            }
+        });
     </script>
 </th:block>

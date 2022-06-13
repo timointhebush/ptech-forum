@@ -2,6 +2,7 @@ package com.example.ptechforum.controller;
 
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
+import com.example.ptechforum.model.dto.PostDto;
 import com.example.ptechforum.model.helper.CurrentUser;
 import com.example.ptechforum.model.vo.PostVo;
 import com.example.ptechforum.service.FileService;
@@ -78,10 +79,9 @@ public class PostController {
         return "redirect:/posts/" + postForUpdate.getId();
     }
 
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
-        postService.deleteById(id);
-        return "redirect:/posts";
+    @DeleteMapping("/{id}")
+    public @ResponseBody PostDto delete(@PathVariable("id") Long id) {
+        return new PostDto(postService.deleteById(id));
     }
 
     public void activateNav(Model model) {

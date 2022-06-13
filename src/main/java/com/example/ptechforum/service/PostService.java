@@ -32,12 +32,13 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public Post deleteById(Long id) {
         Post post = this.findById(id);
         if (!Objects.isNull(post.getFile())) {
             fileService.deleteFileById(post.getFile().getId());
         }
         postRepository.delete(post);
+        return post;
     }
 
     public Page<Post> findAll(Pageable pageable) {

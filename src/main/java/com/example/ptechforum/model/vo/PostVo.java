@@ -31,4 +31,7 @@ public class PostVo {
         return Arrays.asList(this.deleteFileIds);
     }
 
+    public boolean hasFile() {
+        return !this.file.isEmpty();
+    }
 }

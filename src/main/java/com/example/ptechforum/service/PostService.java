@@ -19,33 +19,16 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final MemberService memberService;
     private final FileService fileService;
 
     @Transactional
-    public Post save(PostVo vo, Member member) throws IOException {
-        Post post = Post.builder()
-                .title(vo.getTitle())
-                .content(vo.getContent())
-                .member(member).build();
-        post = postRepository.save(post);
-        if (!vo.getFile().isEmpty()) {
-            fileService.saveAttachment(vo.getFile(), post);
-        }
-        return post;
+    public Post save(Post post) throws IOException {
+        return postRepository.save(post);
     }
 
     public Post findById(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
         return postOptional.orElse(null);
-    }
-
-    @Transactional
-    public Post update(PostVo vo) throws IOException {
-        Post post = this.findById(vo.getId());
-        post.update(vo);
-        fileService.updateAttachment(vo.getDeleteFileIds(), vo.getFile(), post);
-        return post;
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
 import com.example.ptechforum.model.helper.CurrentUser;
 import com.example.ptechforum.model.vo.PostVo;
+import com.example.ptechforum.service.FileService;
 import com.example.ptechforum.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.io.IOException;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final FileService fileService;
 
     @GetMapping("")
     public String index(Model model, @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -40,8 +42,15 @@ public class PostController {
 
     @PostMapping("")
     public String create(@ModelAttribute PostVo vo, @CurrentUser Member currentMember) throws IOException {
-        Post savedPost = postService.save(vo, currentMember);
-        return "redirect:/posts/" + savedPost.getId();
+        Post post = Post.builder()
+                .title(vo.getTitle())
+                .content(vo.getContent())
+                .member(currentMember).build();
+        postService.save(post);
+        if (vo.hasFile()) {
+            fileService.saveAttachment(vo.getFile(), post);
+        }
+        return "redirect:/posts/" + post.getId();
     }
 
     @GetMapping("/{id}")
@@ -62,8 +71,11 @@ public class PostController {
 
     @PostMapping("/{id}")
     public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo) throws IOException {
-        Post updatedPost = postService.update(vo);
-        return "redirect:/posts/" + updatedPost.getId();
+        Post postForUpdate = postService.findById(id);
+        postForUpdate.update(vo);
+        postService.save(postForUpdate);
+        fileService.updateAttachment(postForUpdate, vo.getDeleteFileIds(), vo.getFile());
+        return "redirect:/posts/" + postForUpdate.getId();
     }
 
     @PostMapping("/{id}/delete")

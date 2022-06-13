@@ -112,7 +112,7 @@ public class FileService {
     }
 
     @Transactional
-    public void updateAttachment(List<Long> deleteFileIds, MultipartFile multipartFile, Post post) throws IOException {
+    public void updateAttachment(Post post, List<Long> deleteFileIds, MultipartFile multipartFile) throws IOException {
         if (!deleteFileIds.isEmpty()) {
             this.deleteAllFileById(deleteFileIds);
         }

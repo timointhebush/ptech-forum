@@ -4,7 +4,7 @@ import com.example.ptechforum.model.MemberAdapter;
 import com.example.ptechforum.model.Role;
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.enums.Author;
-import com.example.ptechforum.model.vo.MemberSaveRequestVo;
+import com.example.ptechforum.model.vo.MemberVo;
 import com.example.ptechforum.repository.RoleRepository;
 import com.example.ptechforum.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +71,7 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(MemberSaveRequestVo vo) {
+    public void save(MemberVo vo) {
         Member member = Member.builder()
                 .email(vo.getEmail())
                 .encryptedPassword(bCryptPasswordEncoder.encode(vo.getPassword()))

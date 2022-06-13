@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostSaveRequestVo {
+public class PostVo {
     private Long id;
 
     private String title;

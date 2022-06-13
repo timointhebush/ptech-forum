@@ -1,6 +1,6 @@
 package com.example.ptechforum.model;
 
-import com.example.ptechforum.model.vo.CommentSaveRequestVo;
+import com.example.ptechforum.model.vo.CommentVo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class Comment {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    public Comment(CommentSaveRequestVo vo) {
+    public Comment(CommentVo vo) {
         this.content = vo.getContent();
     }
 

@@ -2,7 +2,7 @@ package com.example.ptechforum.service;
 
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
-import com.example.ptechforum.model.vo.PostSaveRequestVo;
+import com.example.ptechforum.model.vo.PostVo;
 import com.example.ptechforum.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public class PostService {
     private final FileService fileService;
 
     @Transactional
-    public Post save(PostSaveRequestVo vo, Member member) throws IOException {
+    public Post save(PostVo vo, Member member) throws IOException {
         Post post = Post.builder()
                 .title(vo.getTitle())
                 .content(vo.getContent())
@@ -42,7 +41,7 @@ public class PostService {
     }
 
     @Transactional
-    public Post update(PostSaveRequestVo vo) throws IOException {
+    public Post update(PostVo vo) throws IOException {
         Post post = this.findById(vo.getId());
         post.update(vo);
         fileService.updateAttachment(vo.getDeleteFileIds(), vo.getFile(), post);

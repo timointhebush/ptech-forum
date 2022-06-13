@@ -1,6 +1,6 @@
 package com.example.ptechforum.controller;
 
-import com.example.ptechforum.model.vo.MemberSaveRequestVo;
+import com.example.ptechforum.model.vo.MemberVo;
 import com.example.ptechforum.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class MemberController {
     }
 
     @PostMapping("")
-    public String create(@ModelAttribute MemberSaveRequestVo vo) {
+    public String create(@ModelAttribute MemberVo vo) {
         memberService.save(vo);
         return "redirect:/";
     }

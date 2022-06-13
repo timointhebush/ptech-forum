@@ -7,10 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberSaveRequestVo {
-    private String email;
+public class CommentVo {
 
-    private String password;
+    private Long id;
 
-    private String username;
+    private String content;
+
+    private Long postId;
 }

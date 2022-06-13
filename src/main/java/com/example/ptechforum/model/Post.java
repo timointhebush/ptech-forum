@@ -1,6 +1,6 @@
 package com.example.ptechforum.model;
 
-import com.example.ptechforum.model.vo.PostSaveRequestVo;
+import com.example.ptechforum.model.vo.PostVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ public class Post {
         this.member = member;
     }
 
-    public void update(PostSaveRequestVo vo) {
+    public void update(PostVo vo) {
         this.title = vo.getTitle();
         this.content = vo.getContent();
     }

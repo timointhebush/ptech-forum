@@ -3,7 +3,7 @@ package com.example.ptechforum.controller;
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
 import com.example.ptechforum.model.helper.CurrentUser;
-import com.example.ptechforum.model.vo.PostSaveRequestVo;
+import com.example.ptechforum.model.vo.PostVo;
 import com.example.ptechforum.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,14 +32,14 @@ public class PostController {
 
     @GetMapping("/new")
     public String newPost(Model model) {
-        PostSaveRequestVo post = new PostSaveRequestVo();
+        PostVo post = new PostVo();
         model.addAttribute("post", post);
         this.activateNav(model);
         return "app/posts/new";
     }
 
     @PostMapping("")
-    public String create(@ModelAttribute PostSaveRequestVo vo, @CurrentUser Member currentMember) throws IOException {
+    public String create(@ModelAttribute PostVo vo, @CurrentUser Member currentMember) throws IOException {
         Post savedPost = postService.save(vo, currentMember);
         return "redirect:/posts/" + savedPost.getId();
     }
@@ -61,7 +61,7 @@ public class PostController {
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute PostSaveRequestVo vo) throws IOException {
+    public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo) throws IOException {
         Post updatedPost = postService.update(vo);
         return "redirect:/posts/" + updatedPost.getId();
     }

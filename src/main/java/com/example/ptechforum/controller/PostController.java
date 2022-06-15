@@ -70,7 +70,7 @@ public class PostController {
         return "app/posts/new";
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo) throws IOException {
         Post postForUpdate = postService.findById(id);
         postForUpdate.update(vo);

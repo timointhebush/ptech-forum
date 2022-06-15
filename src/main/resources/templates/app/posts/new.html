@@ -3,12 +3,12 @@
       layout:decorate="~{layouts/app}">
 <div layout:fragment="content" class="container-fluid">
     <div class="container my-3 p-4 bg-white rounded-3">
-        <form id="boardForm"
+        <form id="post-form"
               class="form-floating"
               th:object="${post}"
-              th:action="@{${post.getId()==null ? '/posts' : '/posts/'+post.getId()}}"
+              th:action="@{'/posts'}"
               method="post" enctype="multipart/form-data">
-            <input type="hidden" th:field="*{id}">
+            <input type="hidden" name="id" th:field="*{id}">
             <input th:if="${post.getId() != null}" type="hidden" name="_method" value="PUT">
 
             <input type="text" id="title" name="title" class="form-control mb-3" th:field="*{title}">
@@ -36,7 +36,8 @@
 
             <div class="d-flex justify-content-between mt-3">
                 <a th:href="@{'/posts'}" class="btn btn-secondary">목록</a>
-                <input type="submit" class="btn btn-primary" th:value="${post.getId()==null ? '저장' : '수정'}">
+                <input th:if="${post.getId() == null}" type="submit" class="btn btn-primary" th:value="저장">
+                <button th:if="${post.getId() != null}" id="post-edit-btn" class="btn btn-primary">수정</button>
             </div>
         </form>
     </div>

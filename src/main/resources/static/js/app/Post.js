@@ -5,6 +5,7 @@ class Post {
         this.fileDeleteBtns = document.getElementsByClassName("file-delete-btn");
         this.fileInput = document.getElementById("file-input");
         this.fileNum = 0;
+        this.postEditBtn = document.getElementById("post-edit-btn");
         if (this.fileDeleteBtns) {
             this.fileNum = this.fileDeleteBtns.length;
             for (let i = 0; i < this.fileNum; i++) {
@@ -16,6 +17,30 @@ class Post {
                 if (this.fileNum !== 0) {
                     e.preventDefault();
                     alert("첨부 파일은 최대 1개 업로드할 수 있습니다.");
+                }
+            })
+        }
+        if (this.postEditBtn) {
+            this.postEditBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (!confirm("게시글을 수정하시겠습니까?")) {
+                    return
+                }
+                let postForm = document.getElementById("post-form");
+                let postFormData = new FormData(postForm);
+                let postId = postFormData.get('id');
+                try {
+                    const response = fetch("/posts/" + postId, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': postFormData.get('_csrf')
+                        },
+                        body: JSON.stringify(postFormData)
+                    });
+                    window.location.href = '/posts/' + postId;
+                } catch(error) {
+                    alert("게시글 수정 중 오류가 발생했습니다.");
                 }
             })
         }

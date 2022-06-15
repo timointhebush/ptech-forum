@@ -1,16 +1,17 @@
 package com.example.ptechforum.service;
 
-import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
-import com.example.ptechforum.model.vo.PostVo;
+import com.example.ptechforum.model.dto.PostDto;
 import com.example.ptechforum.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,6 +43,6 @@ public class PostService {
     }
 
     public Page<Post> findAll(Pageable pageable) {
-        return postRepository.findAll(pageable);
+        return postRepository.findAllWithMemberAndFile(pageable);
     }
 }

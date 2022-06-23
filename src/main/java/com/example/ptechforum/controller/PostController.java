@@ -2,9 +2,11 @@ package com.example.ptechforum.controller;
 
 import com.example.ptechforum.model.Member;
 import com.example.ptechforum.model.Post;
+import com.example.ptechforum.model.dto.CommentDto;
 import com.example.ptechforum.model.dto.PostDto;
 import com.example.ptechforum.model.helper.CurrentUser;
 import com.example.ptechforum.model.vo.PostVo;
+import com.example.ptechforum.service.CommentService;
 import com.example.ptechforum.service.FileService;
 import com.example.ptechforum.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class PostController {
     private final PostService postService;
     private final FileService fileService;
+    private final CommentService commentService;
 
     @GetMapping("")
     public String index(Model model, @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -86,5 +89,11 @@ public class PostController {
 
     public void activateNav(Model model) {
         model.addAttribute("navActive", "posts");
+    }
+
+    @GetMapping("/{id}/comments")
+    @ResponseBody
+    public Page<CommentDto> indexComments(@PathVariable("id") Long id, Pageable pageable) {
+        return commentService.findAllByPostId(pageable, id);
     }
 }

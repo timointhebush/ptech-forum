@@ -1,0 +1,16 @@
+{{#each comment}}
+    <div>
+        <div class="mt-4">
+            <h6>{{this.member.username}}</h6>
+            <div class="d-flex justify-content-between">
+                <div>{{this.content}}</div>
+                <div class="d-flex">
+                    <button class="btn btn-danger btn-sm mx-1 btn-delete">삭제</button>
+                    <button class="btn btn-warning btn-sm mx-1">수정</button>
+                </div>
+            </div>
+            <div class="fs-6" style="color: gray">{{this.updatedAt}}</div>
+        </div>
+        <hr>
+    </div>
+{{/each}}

@@ -3,91 +3,60 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layouts/app" layout:decorate="~{layouts/app}"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<div layout:fragment="content" class="main-content">
-    <div class="container my-3 p-4 bg-white rounded-3">
-        <h1 th:text="${post.getTitle()}"></h1>
-        <div class="fs-6" th:text="'작성자: ' + ${post.getMember().getUsername()}"></div>
-        <div class="fs-6" th:text="'최종 수정일: ' + ${#dates.format(post.updatedAt, 'yyyy.MM.dd HH:mm')}"></div>
-        <hr>
-        <div th:utext="${post.getContent()}"></div>
-        <div th:if="${post.getFile() != null}">
+    <div layout:fragment="content" class="main-content">
+        <div class="container my-3 p-4 bg-white rounded-3">
+            <h1 th:text="${post.getTitle()}"></h1>
+            <div class="fs-6" th:text="'작성자: ' + ${post.getMember().getUsername()}"></div>
+            <div class="fs-6" th:text="'최종 수정일: ' + ${#dates.format(post.updatedAt, 'yyyy.MM.dd HH:mm')}"></div>
             <hr>
-            <h5>첨부파일</h5>
-            <div class="row">
-                <div class="col">
-                    <a th:text="${post.getFile().getOriginalName()}"
-                       th:href="@{/files/{id}(id = ${post.getFile().getId()})}"></a>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-end">
-            <a class="btn btn-secondary mx-1" th:href="@{'/posts'}">목록</a>
-<!--            <form id="post-delete-form" th:action="@{'/posts/' + ${post.getId()}}" method="POST">-->
-<!--                <input type="hidden" name="_method" value="DELETE">-->
-<!--            </form>-->
-            <button id="post-delete-btn" class="btn btn-danger mx-1 btn-delete">삭제</button>
-            <a class="btn btn-warning mx-1" th:href="@{'/posts/' + ${post.getId()} + '/edit'}">수정</a>
-        </div>
-    </div>
-    <div class="container my-3 p-4 bg-white rounded-3">
-        <h2>댓글</h2>
-        <div th:if="${#lists.size(post.getComments()) > 0}" th:each="comment: ${post.getComments()}">
-            <div class="mt-4">
-                <h6 th:text="${comment.getMember().getUsername()}"></h6>
-                <div class="d-flex justify-content-between">
-                    <div th:text="${comment.getContent()}"></div>
-                    <div class="d-flex">
-                        <form th:action="@{'/comments/' + ${comment.getId()} + '/delete'}" method="post">
-                            <input type="submit" class="btn btn-danger btn-sm mx-1 btn-delete" value="삭제">
-                        </form>
-                        <a class="btn btn-warning btn-sm mx-1" th:href="@{'/comments/' + ${post.getId()} + '/edit'}">수정</a>
+            <div th:utext="${post.getContent()}"></div>
+            <div th:if="${post.getFile() != null}">
+                <hr>
+                <h5>첨부파일</h5>
+                <div class="row">
+                    <div class="col">
+                        <a th:text="${post.getFile().getOriginalName()}"
+                           th:href="@{/files/{id}(id = ${post.getFile().getId()})}"></a>
                     </div>
                 </div>
-                <div class="fs-6" style="color: gray" th:text="${#dates.format(comment.getUpdatedAt(), 'yyyy.MM.dd HH:mm')}">
             </div>
             <hr>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-secondary mx-1" th:href="@{'/posts'}">목록</a>
+                <button id="post-delete-btn" class="btn btn-danger mx-1 btn-delete">삭제</button>
+                <a class="btn btn-warning mx-1" th:href="@{'/posts/' + ${post.getId()} + '/edit'}">수정</a>
+            </div>
         </div>
-        <div th:unless="${#lists.size(post.getComments()) > 0}">
-            <div>댓글이 없습니다.</div>
+        <div class="container my-3 p-4 bg-white rounded-3">
+            <h2>댓글</h2>
+            <div id="comments"></div>
+            <div>
+                <th:block sec:authorize="isAuthenticated()">
+                    <h6 th:text="${#authentication.getPrincipal().getMember().getUsername()}"></h6>
+                    <form class="form-floating" th:action="@{'/comments'}" method="post">
+                        <textarea th:name="content" class="form-control" placeholder="댓글을 남겨보세요." id="comment-input"></textarea>
+                        <label for="comment-input">댓글을 남겨보세요.</label>
+                        <input name="postId" type="hidden" th:value="${post.getId()}">
+                        <div class="d-flex justify-content-end mt-2">
+                            <input type="submit" class="btn btn-primary btn-sm" th:value="등록">
+                        </div>
+                    </form>
+                </th:block>
+                <th:block sec:authorize="isAnonymous()">
+                    <h6>댓글 작성을 위해 로그인해주세요!</h6>
+                </th:block>
+            </div>
+            <nav class="d-flex justify-content-center" aria-label="Page navigation">
+                <ul class="pagination" id="comments-pagination">
+                </ul>
+            </nav>
         </div>
     </div>
-        <div>
-            <th:block sec:authorize="isAuthenticated()">
-                <h6 th:text="${#authentication.getPrincipal().getMember().getUsername()}"></h6>
-                <form class="form-floating" th:action="@{'/comments'}" method="post">
-                    <textarea th:name="content" class="form-control" placeholder="댓글을 남겨보세요." id="comment-input"></textarea>
-                    <label for="comment-input">댓글을 남겨보세요.</label>
-                    <input name="postId" type="hidden" th:value="${post.getId()}">
-                    <div class="d-flex justify-content-end mt-2">
-                        <input type="submit" class="btn btn-primary btn-sm" th:value="등록">
-                    </div>
-                </form>
-            </th:block>
-            <th:block sec:authorize="isAnonymous()">
-                <h6>댓글 작성을 위해 로그인해주세요!</h6>
-            </th:block>
-        </div>
-    </div>
-</div>
 </body>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        const postDeleteBtn = document.getElementById("post-delete-btn");
-        postDeleteBtn.addEventListener("click", async () => {
-            let postId = "[[${post.getId()}]]";
-            let csrfMetaTag = document.getElementsByName('_csrf')[0];
-            try {
-                const response = await fetch("/posts/" + postId, {
-                    method: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': csrfMetaTag.getAttribute("content")
-                    }
-                });
-                location.href = "/posts";
-            } catch(error) {
-                alert("게시글 삭제 중 오류가 발생했습니다.");
-            }
-        });
+        const postId = "[[${post.getId()}]]";
+        new Post(postId);
+        new Comment(postId);
     </script>
 </th:block>

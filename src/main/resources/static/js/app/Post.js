@@ -1,11 +1,14 @@
 class Post {
-    constructor() {
+    constructor(postId) {
         this.deleteFileIds = [];
         this.deleteFileIdsInput = document.getElementById("delete-file-ids-input");
         this.fileDeleteBtns = document.getElementsByClassName("file-delete-btn");
         this.fileInput = document.getElementById("file-input");
         this.fileNum = 0;
         this.postEditBtn = document.getElementById("post-edit-btn");
+        this.postDeleteBtn = document.getElementById("post-delete-btn");
+        this.csrfMetaTag = document.getElementsByName('_csrf')[0];
+        this.postId = postId;
         if (this.fileDeleteBtns) {
             this.fileNum = this.fileDeleteBtns.length;
             for (let i = 0; i < this.fileNum; i++) {
@@ -44,6 +47,9 @@ class Post {
                 }
             })
         }
+        if (this.postDeleteBtn) {
+            this.postDeleteBtn.addEventListener("click", this.deletePost);
+        }
     };
 
     removeAttachment = (e) => {
@@ -52,5 +58,19 @@ class Post {
         attachmentFile.remove();
         this.deleteFileIdsInput.value = this.deleteFileIds;
         this.fileNum--;
+    }
+
+    deletePost = async () => {
+        try {
+            const response = await fetch("/posts/" + this.postId, {
+                method: "DELETE",
+                headers: {
+                    'X-CSRF-TOKEN': this.csrfMetaTag.getAttribute("content")
+                }
+            });
+            location.href = "/posts";
+        } catch (error) {
+            alert("게시글 삭제 중 오류가 발생했습니다.");
+        }
     }
 }

@@ -66,16 +66,22 @@ public class PostController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model) {
+    public String edit(@PathVariable("id") Long id, Model model, @CurrentUser Member currentMember) throws Exception {
         Post post = postService.findById(id);
+        if (!post.isSameMember(currentMember)) {
+            throw new Exception("수정 권한이 없습니다.");
+        }
         model.addAttribute("post", post);
         this.activateNav(model);
         return "app/posts/new";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo) throws IOException {
+    public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo, @CurrentUser Member currentMember) throws Exception {
         Post postForUpdate = postService.findById(id);
+        if (!postForUpdate.isSameMember(currentMember)) {
+            throw new Exception("수정 권한이 없습니다.");
+        }
         postForUpdate.update(vo);
         postService.save(postForUpdate);
         fileService.updateAttachment(postForUpdate, vo.getDeleteFileIds(), vo.getFile());
@@ -83,7 +89,11 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public @ResponseBody PostDto delete(@PathVariable("id") Long id) {
+    public @ResponseBody PostDto delete(@PathVariable("id") Long id, @CurrentUser Member currentMember) throws Exception {
+        Post post = postService.findById(id);
+        if (!post.isSameMember(currentMember)) {
+            throw new Exception("삭제 권한이 없습니다.");
+        }
         return new PostDto(postService.deleteById(id));
     }
 

@@ -68,9 +68,13 @@ class Post {
                     'X-CSRF-TOKEN': this.csrfMetaTag.getAttribute("content")
                 }
             });
-            location.href = "/posts";
+            if (response.ok) {
+                location.href = "/posts";
+            } else {
+                throw new Error("삭제 권한이 없습니다.");
+            }
         } catch (error) {
-            alert("게시글 삭제 중 오류가 발생했습니다.");
+            alert(error.message);
         }
     }
 }

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<body lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/app" layout:decorate="~{layouts/app}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <div layout:fragment="content" class="main-content"
+         th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+        <div class="container py-4">
+            <h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|"></h1>
+            <p th:text="'status : ' + ${errorStatus}"></p>
+            <p th:text="'Message : ' + ${errorMessage}"></p>
+        </div>
+    </div>
+</body>

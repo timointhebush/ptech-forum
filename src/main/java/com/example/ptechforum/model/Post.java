@@ -52,4 +52,8 @@ public class Post {
         this.title = vo.getTitle();
         this.content = vo.getContent();
     }
+
+    public boolean isSameMember(Member member) {
+        return this.member.getId().equals(member.getId());
+    }
 }

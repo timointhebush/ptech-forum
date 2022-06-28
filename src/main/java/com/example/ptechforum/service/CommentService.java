@@ -18,16 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final MemberService memberService;
-    private final PostService postService;
 
     @Transactional
-    public Comment save(CommentVo vo) {
-        Member member = memberService.getLoggedInMember();
-        Post post = postService.findById(vo.getPostId());
-        Comment comment = new Comment(vo);
-        comment.assignMember(member);
-        comment.assignPost(post);
+    public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
 

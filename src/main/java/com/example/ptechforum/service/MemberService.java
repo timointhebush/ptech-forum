@@ -65,11 +65,6 @@ public class MemberService implements UserDetailsService {
         return new MemberAdapter(member);
     }
 
-    public Member getLoggedInMember() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return memberRepository.findByEmail(user.getUsername());
-    }
-
     @Transactional
     public void save(MemberVo vo) {
         Member member = Member.builder()

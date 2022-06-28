@@ -66,6 +66,7 @@ class Comment {
         let additionalLeft =  2 - (totalPages - currentPage);
         if (additionalLeft > 0) {
             startPage -= additionalLeft;
+            startPage = Math.max(1, startPage);
         }
         if (currentPage > 1) {
             this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {

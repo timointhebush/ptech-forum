@@ -33,14 +33,14 @@
             <div>
                 <th:block sec:authorize="isAuthenticated()">
                     <h6 th:text="${#authentication.getPrincipal().getMember().getUsername()}"></h6>
-                    <form class="form-floating" th:action="@{'/comments'}" method="post">
+                    <form id="comment-form" name="comment-form" class="form-floating" th:action="@{'/comments'}" th:method="post">
                         <textarea th:name="content" class="form-control" placeholder="댓글을 남겨보세요." id="comment-input"></textarea>
                         <label for="comment-input">댓글을 남겨보세요.</label>
                         <input name="postId" type="hidden" th:value="${post.getId()}">
-                        <div class="d-flex justify-content-end mt-2">
-                            <input type="submit" class="btn btn-primary btn-sm" th:value="등록">
-                        </div>
                     </form>
+                    <div class="d-flex justify-content-end mt-2">
+                        <button id="comment-submit-btn" class="btn btn-primary btn-sm">등록</button>
+                    </div>
                 </th:block>
                 <th:block sec:authorize="isAnonymous()">
                     <h6>댓글 작성을 위해 로그인해주세요!</h6>

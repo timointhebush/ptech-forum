@@ -3,9 +3,16 @@ class Comment {
         this.postId = postId;
         this.csrfMetaTag = document.getElementsByName('_csrf')[0];
         this.firstLoad = true;
+        this.totalComments = 0;
+        this.size = 0;
 
         this.commentsDiv = document.getElementById("comments");
         this.commentsPaginationUl = document.getElementById("comments-pagination");
+
+        this.commentSubmitBtn = document.getElementById("comment-submit-btn");
+        if (this.commentSubmitBtn) {
+            this.commentSubmitBtn.addEventListener("click", this.submitComment);
+        }
         this.initComments();
     }
 
@@ -16,6 +23,8 @@ class Comment {
 
     showCommentsOfPage = async (page) => {
         let commentsPage = await this.fetchCommentsPage(page);
+        this.totalComments = commentsPage["totalElements"];
+        this.size = commentsPage["size"];
         await this.updatePageItems(commentsPage);
         await this.updateComments(commentsPage);
         if (!this.firstLoad) {
@@ -50,30 +59,31 @@ class Comment {
     }
 
     appendPageItems = (commentsPage, commentPageLiTemplateData) => {
-        if (commentsPage['number'] > 0) {
+        let currentPage = commentsPage['number'] + 1
+        let totalPages = commentsPage['totalPages'];
+        let numOfIndexes = 0;
+        let startPage = Math.max(1, currentPage - 2);
+        let additionalLeft =  2 - (totalPages - currentPage);
+        if (additionalLeft > 0) {
+            startPage -= additionalLeft;
+        }
+        if (currentPage > 1) {
             this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {
-                "data-page": commentsPage['number'],
+                "data-page": currentPage - 1,
                 "idx": '이전'
             }));
         }
-        if (commentsPage['totalPages'] < 5) {
-            for (let i=0; i < commentsPage['totalPages']; i++) {
-                this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {
-                    "data-page": i + 1,
-                    "idx": i + 1
-                }));
-            }
-        } else {
-            for (let i=commentsPage['number']-2; i<commentsPage['number']+2; i++) {
-                this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {
-                    "data-page": i + 1,
-                    "idx": i + 1
-                }));
-            }
-        }
-        if (commentsPage['number'] < commentsPage['totalPages'] - 1) {
+        while (numOfIndexes < 5 && startPage <= totalPages) {
             this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {
-                "data-page": commentsPage['number'] + 2,
+                "data-page": startPage,
+                "idx": startPage
+            }));
+            numOfIndexes += 1;
+            startPage += 1;
+        }
+        if (currentPage < totalPages) {
+            this.commentsPaginationUl.appendChild(this.createLiNode(commentPageLiTemplateData, {
+                "data-page": currentPage + 1,
                 "idx": '다음'
             }));
         }
@@ -94,5 +104,29 @@ class Comment {
         let div = document.createElement('div');
         div.innerHTML = liText.trim();
         return div.firstChild;
+    }
+
+    submitComment = async (event) => {
+        event.preventDefault();
+        try {
+            let commentForm = document.getElementById("comment-form");
+            let commentFormData = new FormData(commentForm);
+            const response = await fetch("/comments", {
+                method: "POST",
+                body: commentFormData
+            });
+            if (response.ok) {
+                let lastPage = parseInt((this.totalComments + 1) / this.size);
+                if ((this.totalComments + 1) % this.size !== 0) {
+                    lastPage += 1;
+                }
+                document.getElementById("comment-input").value = "";
+                await this.showCommentsOfPage(lastPage);
+            } else {
+                throw new Error("댓글 작성 중 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            alert(error.message);
+        }
     }
 }

@@ -77,7 +77,8 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") Long id, @ModelAttribute PostVo vo, @CurrentUser Member currentMember) throws Exception {
+    @ResponseBody
+    public PostDto update(@PathVariable("id") Long id, @ModelAttribute PostVo vo, @CurrentUser Member currentMember) throws Exception {
         Post postForUpdate = postService.findById(id);
         if (!postForUpdate.isSameMember(currentMember)) {
             throw new Exception("수정 권한이 없습니다.");
@@ -85,7 +86,7 @@ public class PostController {
         postForUpdate.update(vo);
         postService.save(postForUpdate);
         fileService.updateAttachment(postForUpdate, vo.getDeleteFileIds(), vo.getFile());
-        return "redirect:/posts/" + postForUpdate.getId();
+        return new PostDto(postForUpdate);
     }
 
     @DeleteMapping("/{id}")

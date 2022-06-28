@@ -24,28 +24,7 @@ class Post {
             })
         }
         if (this.postEditBtn) {
-            this.postEditBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                if (!confirm("게시글을 수정하시겠습니까?")) {
-                    return
-                }
-                let postForm = document.getElementById("post-form");
-                let postFormData = new FormData(postForm);
-                let postId = postFormData.get('id');
-                try {
-                    const response = fetch("/posts/" + postId, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': postFormData.get('_csrf')
-                        },
-                        body: JSON.stringify(postFormData)
-                    });
-                    window.location.href = '/posts/' + postId;
-                } catch(error) {
-                    alert("게시글 수정 중 오류가 발생했습니다.");
-                }
-            })
+            this.postEditBtn.addEventListener("click", this.editPost);
         }
         if (this.postDeleteBtn) {
             this.postDeleteBtn.addEventListener("click", this.deletePost);
@@ -61,6 +40,9 @@ class Post {
     }
 
     deletePost = async () => {
+        if (!confirm("삭제하시겠습니까?")) {
+            return 0;
+        }
         try {
             const response = await fetch("/posts/" + this.postId, {
                 method: "DELETE",
@@ -75,6 +57,25 @@ class Post {
             }
         } catch (error) {
             alert(error.message);
+        }
+    }
+
+    editPost = async (event) => {
+        if (!confirm("게시글을 수정하시겠습니까?")) {
+            event.preventDefault();
+            return;
+        }
+        let postForm = document.getElementById("post-form");
+        let postFormData = new FormData(postForm);
+        let postId = postFormData.get('id');
+        try {
+            const response = await fetch("/posts/" + postId, {
+                method: 'PUT',
+                body: postFormData
+            });
+            window.location.href = '/posts/' + postId;
+        } catch(error) {
+            alert("게시글 수정 중 오류가 발생했습니다.");
         }
     }
 }
